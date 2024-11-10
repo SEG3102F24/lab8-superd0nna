@@ -19,9 +19,7 @@ class EmployeesResolver(private val employeesRepository: EmployeesRepository) {
 
     @MutationMapping
     fun newEmployee(@Argument("createEmployeeInput") input: CreateEmployeeInput): Employee {
-        if (input.name != null &&
-                input.email != null &&
-                input.dateOfBirth != null && input.city != null && input.salary != null) {
+        if (input.name != null && input.email != null && input.dateOfBirth != null && input.city != null && input.salary != null) {
             val employee = Employee(input.name, input.dateOfBirth, input.city, input.salary, input.gender, input.email)
             employee.id = UUID.randomUUID().toString()
             employeesRepository.save(employee)
@@ -30,5 +28,11 @@ class EmployeesResolver(private val employeesRepository: EmployeesRepository) {
             throw Exception("Invalid input")
         }
 
-}
+    }
+
+    @MutationMapping
+    fun deleteEmployee(@Argument("id") id: String) : Boolean {
+        employeesRepository.deleteById(id)
+        return true
+    }
 }
